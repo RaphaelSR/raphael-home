@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { test, expect } from "@playwright/test";
 for (const locale of ["en", "pt", "es"]) {
   test(`SEO: ${locale} has crawlable content and metadata`, async ({
@@ -58,3 +59,15 @@ test("SEO: explicit language wins over stored preference and history updates met
     "en_US",
   );
 });
+
+for (const locale of ["en", "pt", "es"]) {
+  test(`visible labels match accessible names in ${locale}`, async ({
+    page,
+  }) => {
+    await page.goto(`/home/${locale}/`);
+    const results = await new AxeBuilder({ page })
+      .withRules(["label-content-name-mismatch"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+}

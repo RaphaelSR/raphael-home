@@ -77,7 +77,11 @@ function Header({
   return (
     <header className={`header ${header.compact ? "is-compact" : ""}`}>
       <div className="header-inner">
-        <a className="name home-mark" href="#main" aria-label={t.home}>
+        <a
+          className="name home-mark"
+          href="#main"
+          aria-label={`r. — ${t.home}`}
+        >
           <span aria-hidden="true">r.</span>
         </a>
         <nav aria-label={t.navigation}>
@@ -249,7 +253,7 @@ export default function App({ initialLanguage = "en" }) {
           <a href="https://wa.me/541127252431">
             WhatsApp <Arrow />
           </a>
-          <button className="discord" onClick={copyDiscord} aria-label={t.copy}>
+          <button className="discord" onClick={copyDiscord} title={t.copy}>
             Discord <span>raphaelsr</span>
             <span aria-hidden="true">⧉</span>
           </button>
