@@ -787,3 +787,7 @@ html {
   position: fixed;
   z-index: 30;
 }
+
+.locale-links {
+  margin-top: 1.5rem;
+}
