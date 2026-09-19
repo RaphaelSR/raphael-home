@@ -152,9 +152,7 @@ test("essential links remain accessible without JavaScript", async ({
   await expect(
     page.getByRole("heading", { name: "Raphael Rocha." }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "Portfolio", exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Portfolio/ })).toBeVisible();
   await expect(
     page.getByRole("link", { name: /Fly Brain Bench/ }),
   ).toBeVisible();

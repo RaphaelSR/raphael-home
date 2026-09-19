@@ -23,3 +23,17 @@ GitHub Actions validates formatting, lint, build, dependency audit and Chromium/
 `public/CNAME` binds the homepage to raphaelrocha.com. DNS and redirects are managed in Cloudflare. Subdomains remain attached to their existing repositories. Legacy /pt/, /en/ and /es/ URLs lead to the professional portfolio.
 
 A release can be rolled back by reverting its commit and rerunning the deployment workflow. Accessibility automation covers common WCAG 2.2 A/AA checks, multiple widths, themes and languages, keyboard navigation and reduced motion. It is not a substitute for a full assistive-technology audit, nor is a dependency audit a guarantee against unknown vulnerabilities.
+
+## Search and sharing
+
+The production build prerenders the complete React page in English, Portuguese and
+Spanish. Canonical language URLs live at `/home/en/`, `/home/pt/` and `/home/es/`.
+The root provides an English fallback and selects the visitor's saved/browser
+language after hydration. Explicit language URLs take precedence over preferences.
+The older `/en/`, `/pt/` and `/es/` routes still redirect to the portfolio.
+
+`src/seo.js` supplies localized titles, descriptions, canonical URLs and structured
+data. The sitemap lists the canonical pages; visible footer links and `hreflang`
+connect all translations. `public/social-card.png` is a local 1200×630 sharing image.
+SEO tests cover HTML without JavaScript, language history and legacy routes.
+Search Console indexing and ranking require separate observation after publication.

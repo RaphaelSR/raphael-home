@@ -1,3 +1,4 @@
+import { updateMetadata } from "./seo";
 import { useEffect, useState } from "react";
 import { languages } from "./i18n";
 const read = (key) => {
@@ -14,23 +15,39 @@ const save = (key, value) => {
     /* Preferences remain usable when storage is unavailable. */
   }
 };
-export function usePreferences() {
-  const [language, setLanguage] = useState(() => {
-    const stored = read("home-language");
-    if (Object.hasOwn(languages, stored)) return stored;
-    return (
-      (navigator.languages || [navigator.language])
-        .map((l) => l.split("-")[0])
-        .find((l) => Object.hasOwn(languages, l)) || "en"
-    );
-  });
-  const [theme, setTheme] = useState(() => {
-    const stored = read("home-theme");
-    return ["system", "light", "dark"].includes(stored) ? stored : "system";
-  });
+export function usePreferences(initialLanguage) {
+  const [language, setLanguage] = useState(initialLanguage);
+  const [theme, setTheme] = useState("system");
+  useEffect(() => {
+    const applyLocation = () => {
+      const pathLocale = location.pathname.match(/^\/home\/(en|pt|es)\/$/)?.[1];
+      const stored = read("home-language");
+      const next =
+        pathLocale ||
+        (Object.hasOwn(languages, stored)
+          ? stored
+          : (navigator.languages || [navigator.language])
+              .map((l) => l.split("-")[0])
+              .find((l) => Object.hasOwn(languages, l)) || "en");
+      if (!pathLocale && location.pathname === "/") {
+        history.replaceState(
+          null,
+          "",
+          `/home/${next}/${location.search}${location.hash}`,
+        );
+      }
+      setLanguage(next);
+    };
+    applyLocation();
+    const storedTheme = read("home-theme");
+    if (["system", "light", "dark"].includes(storedTheme))
+      setTheme(storedTheme);
+    addEventListener("popstate", applyLocation);
+    return () => removeEventListener("popstate", applyLocation);
+  }, []);
   useEffect(() => {
     document.documentElement.lang = language === "pt" ? "pt-BR" : language;
-    document.title = `Raphael Rocha — ${language === "pt" ? "software e projetos" : language === "es" ? "software y proyectos" : "software and projects"}`;
+    updateMetadata(language);
   }, [language]);
   useEffect(() => {
     const media = matchMedia("(prefers-color-scheme: dark)");
@@ -46,6 +63,11 @@ export function usePreferences() {
     language,
     theme,
     changeLanguage: (value) => {
+      history.pushState(
+        null,
+        "",
+        `/home/${value}/${location.search}${location.hash}`,
+      );
       setLanguage(value);
       save("home-language", value);
     },
