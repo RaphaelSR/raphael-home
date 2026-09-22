@@ -235,15 +235,14 @@ function Admin() {
   }, [session, days, host, refresh]);
   const totals = reports ? rows(reports[0])[0]?.values || [0, 0, 0, 0] : null;
   return (
-    <div className="admin-shell">
+    <div className={`admin-shell${session ? "" : " signed-out"}`}>
       <a className="skip" href="#dashboard">
         Pular para o conteúdo
       </a>
       <header>
         <a className="brand" href="/">
-          r.<span>Analytics</span>
+          r.{session && <span>Analytics</span>}
         </a>
-        <span className="private">Área privada</span>
         {session && (
           <button
             onClick={() => {
@@ -258,13 +257,11 @@ function Admin() {
         )}
       </header>
       <main id="dashboard" tabIndex={-1}>
-        <div className="intro">
-          <p className="eyebrow">RAPHAEL ROCHA / VISÃO GERAL</p>
-          <h1>Um olhar sobre os projetos.</h1>
-          <p className="muted">
-            Visitas, origens e evolução dos seus sites em um só lugar.
-          </p>
-        </div>
+        {session && (
+          <div className="intro">
+            <h1>Visão geral</h1>
+          </div>
+        )}
         {error && (
           <p role="alert" className="error">
             {error}
@@ -272,14 +269,7 @@ function Admin() {
         )}
         {!session ? (
           <section className="panel login">
-            <span className="lock" aria-hidden="true">
-              ↗
-            </span>
-            <h2>Seus dados, só para você.</h2>
-            <p>
-              Entre com sua conta Google para consultar os relatórios. Nenhum
-              dado privado fica armazenado neste site.
-            </p>
+            <h1>Analytics</h1>
             <button
               className="primary"
               disabled={!ready || loading}
@@ -295,10 +285,6 @@ function Admin() {
                 Aguardando a configuração da conta de Analytics.
               </p>
             )}
-            <p className="muted small">
-              A autorização é somente de leitura e verificada pelo Google. A
-              sessão é apagada ao sair ou recarregar.
-            </p>
           </section>
         ) : (
           <>
@@ -399,7 +385,7 @@ function Admin() {
         )}
       </main>
       <footer>
-        Analytics pessoal · <a href="/">Voltar ao site</a>
+        <a href="/">Voltar ao site</a>
       </footer>
     </div>
   );
