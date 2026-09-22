@@ -3,6 +3,12 @@ import { languages, messages } from "./i18n";
 import { usePreferences } from "./preferences";
 const projects = [
   {
+    id: "basilica",
+    name: "Basílica de Nazaré",
+    type: "study",
+    host: "basilica.raphaelrocha.com",
+  },
+  {
     id: "geometry",
     name: "Geometry",
     type: "tool",

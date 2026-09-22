@@ -16,7 +16,7 @@ for (const language of ["pt", "en", "es"]) {
         language === "pt" ? "pt-BR" : language,
       );
       await expect(page.locator(".current-work h2")).toHaveText("ModPro AI ↗");
-      await expect(page.locator(".project")).toHaveCount(5);
+      await expect(page.locator(".project")).toHaveCount(6);
       await expect(
         page
           .locator(".project")
@@ -126,7 +126,7 @@ test("production assets and content policy", async ({ page }) => {
   });
   page.on("requestfailed", (request) => failures.push(request.url()));
   await page.goto("/");
-  await expect(page.locator(".project")).toHaveCount(5);
+  await expect(page.locator(".project")).toHaveCount(6);
   const policy = await page
     .locator('meta[http-equiv="Content-Security-Policy"]')
     .getAttribute("content");
