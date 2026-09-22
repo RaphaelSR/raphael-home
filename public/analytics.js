@@ -186,7 +186,7 @@
   const init = () => {
     const style = document.createElement("link");
     style.rel = "stylesheet";
-    style.href = "https://raphaelrocha.com/analytics.css";
+    style.href = "https://raphaelrocha.com/analytics.css?v=2";
     document.head.append(style);
     opener = document.createElement("button");
     opener.type = "button";
