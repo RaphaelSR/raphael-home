@@ -43,7 +43,7 @@ test("admin: owner can read reports without persisting tokens; logout clears dat
   expect(requests[0].headers().authorization).toBe("Bearer test-only-token");
   expect(requests[0].postDataJSON().requests).toHaveLength(5);
   await page
-    .getByLabel("Projeto", { exact: true })
+    .getByRole("combobox", { name: "Projeto", exact: true })
     .selectOption("portfolio.raphaelrocha.com");
   await expect.poll(() => requests.length).toBe(2);
   expect(
