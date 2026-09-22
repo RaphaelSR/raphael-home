@@ -1,0 +1,88 @@
+.rr-consent {
+  position: fixed;
+  inset: auto 16px 16px;
+  z-index: 2147483000;
+  max-width: 440px;
+  margin-left: auto;
+  padding: 20px;
+  border: 1px solid #cbd2dd;
+  border-radius: 16px;
+  background: #fff;
+  color: #202936;
+  box-shadow: 0 8px 40px #0002;
+  font:
+    14px/1.55 system-ui,
+    sans-serif;
+  text-align: left;
+}
+.rr-consent strong {
+  font-size: 16px;
+}
+.rr-consent p {
+  margin: 10px 0;
+}
+.rr-consent a {
+  color: #2457a5;
+  text-decoration: underline;
+}
+.rr-consent > div {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.rr-consent button,
+.rr-privacy {
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.rr-consent button {
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid #99a7ba;
+  background: #f3f5f8;
+  color: #202936;
+  border-radius: 8px;
+  padding: 8px 14px;
+}
+.rr-consent button:focus-visible,
+.rr-consent a:focus-visible,
+.rr-privacy:focus-visible {
+  outline: 3px solid #3274d9;
+  outline-offset: 3px;
+}
+.rr-privacy {
+  display: block;
+  margin: 18px auto;
+  padding: 10px 12px;
+  min-height: 44px;
+  border: 1px solid #b1bac8;
+  border-radius: 8px;
+  background: #fff;
+  color: #374151;
+  font:
+    12px/1.5 system-ui,
+    sans-serif;
+}
+.rr-consent button:hover {
+  background: #e6ebf3;
+}
+@media (prefers-color-scheme: dark) {
+  .rr-consent,
+  .rr-privacy {
+    background: #1b2027;
+    color: #e6eaf0;
+    border-color: #515e70;
+  }
+  .rr-consent a {
+    color: #9bbfff;
+  }
+  .rr-consent button {
+    background: #293342;
+    color: #e6eaf0;
+    border-color: #697a91;
+  }
+  .rr-consent button:hover {
+    background: #354457;
+  }
+}
