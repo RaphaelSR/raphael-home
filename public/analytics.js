@@ -20,6 +20,13 @@
   const cookieName = "rr_analytics_consent";
   const disabled = `ga-disable-${id}`;
   const dnt = navigator.doNotTrack === "1" || window.doNotTrack === "1";
+  const compactSites = {
+    "3d.raphaelrocha.com": "geometry",
+    "trivia.raphaelrocha.com": "trivia",
+    "mimica.raphaelrocha.com": "mimica",
+    "snake.raphaelrocha.com": "snake",
+    "flybrain.raphaelrocha.com": "flybrain",
+  };
   const texts = {
     pt: {
       title: "Privacidade",
@@ -184,17 +191,34 @@
     opener = document.createElement("button");
     opener.type = "button";
     opener.className = "rr-privacy";
-    if (
+    const compactSite = compactSites[location.hostname];
+    if (compactSite) {
+      opener.classList.add("rr-privacy--compact", `rr-privacy--${compactSite}`);
+      const icon = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg",
+      );
+      icon.setAttribute("viewBox", "0 0 24 24");
+      icon.setAttribute("aria-hidden", "true");
+      icon.innerHTML =
+        '<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="14.5" cy="10.5" r="1" fill="currentColor"/><circle cx="11.5" cy="15.5" r="1" fill="currentColor"/>';
+      opener.append(icon);
+    } else if (
       !["raphaelrocha.com", "portfolio.raphaelrocha.com"].includes(
         location.hostname,
       )
-    )
+    ) {
       opener.classList.add("rr-privacy--floating");
-    opener.textContent = (
+    }
+    const settings = (
       texts[
         (document.documentElement.lang || navigator.language).slice(0, 2)
       ] || texts.en
     ).settings;
+    if (compactSite) {
+      opener.setAttribute("aria-label", settings);
+      opener.title = settings;
+    } else opener.textContent = settings;
     opener.onclick = show;
     document.body.append(opener);
     if (consent() === "yes" && !dnt) start();
