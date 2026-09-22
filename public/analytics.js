@@ -62,6 +62,7 @@
   let lastPage = "";
   let banner;
   let opener;
+  let flyBoot;
   function gtag() {
     window.dataLayer.push(arguments);
   }
@@ -181,9 +182,13 @@
       actions.append(button);
     }
     banner.append(title, body, link, actions);
-    document.body.append(banner);
+    (flyBoot && !flyBoot.hidden ? flyBoot : document.body).append(banner);
   };
   const init = () => {
+    flyBoot =
+      location.hostname === "flybrain.raphaelrocha.com"
+        ? document.querySelector("#boot")
+        : null;
     const style = document.createElement("link");
     style.rel = "stylesheet";
     style.href = "https://raphaelrocha.com/analytics.css?v=2";
@@ -220,7 +225,19 @@
       opener.title = settings;
     } else opener.textContent = settings;
     opener.onclick = show;
-    document.body.append(opener);
+    (flyBoot || document.body).append(opener);
+    if (flyBoot) {
+      const observer = new MutationObserver(() => {
+        if (!flyBoot.hidden) return;
+        document.body.append(opener);
+        if (banner?.isConnected) document.body.append(banner);
+        observer.disconnect();
+      });
+      observer.observe(flyBoot, {
+        attributes: true,
+        attributeFilter: ["hidden"],
+      });
+    }
     if (consent() === "yes" && !dnt) start();
     else {
       stop();
