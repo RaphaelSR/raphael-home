@@ -34,6 +34,8 @@ export const messages = {
     tool: "Ferramenta",
     game: "Jogo",
     descriptions: {
+      basilica:
+        "Miniatura 3D da Basílica de Nazaré, em Belém, com construção animada e câmeras de detalhe. Uma interpretação estilizada em Three.js.",
       geometry: "Um estúdio para explorar formas, materiais e animação 3D.",
       trivia: "Perguntas e respostas para jogar, competir e aprender em grupo.",
       mimica: "Um jogo para reunir pessoas. Um único celular, a turma toda.",
@@ -81,6 +83,8 @@ export const messages = {
     tool: "Tool",
     game: "Game",
     descriptions: {
+      basilica:
+        "A 3D miniature of the Basilica of Nazaré in Belém, with animated construction and detail cameras. A stylized interpretation in Three.js.",
       geometry: "A studio for exploring shapes, materials and 3D animation.",
       trivia: "Questions and answers to play, compete and learn together.",
       mimica: "A game that brings people together. One phone, the whole group.",
@@ -128,6 +132,8 @@ export const messages = {
     tool: "Herramienta",
     game: "Juego",
     descriptions: {
+      basilica:
+        "Miniatura 3D de la Basílica de Nazaré, en Belém, con construcción animada y cámaras de detalle. Una interpretación estilizada en Three.js.",
       geometry: "Un estudio para explorar formas, materiales y animación 3D.",
       trivia:
         "Preguntas y respuestas para jugar, competir y aprender en grupo.",
