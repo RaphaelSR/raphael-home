@@ -184,6 +184,12 @@
     opener = document.createElement("button");
     opener.type = "button";
     opener.className = "rr-privacy";
+    if (
+      !["raphaelrocha.com", "portfolio.raphaelrocha.com"].includes(
+        location.hostname,
+      )
+    )
+      opener.classList.add("rr-privacy--floating");
     opener.textContent = (
       texts[
         (document.documentElement.lang || navigator.language).slice(0, 2)

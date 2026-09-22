@@ -67,6 +67,14 @@
 .rr-consent button:hover {
   background: #e6ebf3;
 }
+.rr-privacy--floating {
+  position: fixed;
+  right: 12px;
+  bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+  z-index: 2147482999;
+  margin: 0;
+  box-shadow: 0 2px 12px #0001;
+}
 @media (prefers-color-scheme: dark) {
   .rr-consent,
   .rr-privacy {
