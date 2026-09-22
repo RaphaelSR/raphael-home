@@ -191,7 +191,7 @@
         : null;
     const style = document.createElement("link");
     style.rel = "stylesheet";
-    style.href = "https://raphaelrocha.com/analytics.css?v=2";
+    style.href = "https://raphaelrocha.com/analytics.css?v=3";
     document.head.append(style);
     opener = document.createElement("button");
     opener.type = "button";
@@ -214,6 +214,8 @@
       )
     ) {
       opener.classList.add("rr-privacy--floating");
+    } else {
+      opener.classList.add("rr-privacy--inline");
     }
     const settings = (
       texts[
@@ -225,7 +227,30 @@
       opener.title = settings;
     } else opener.textContent = settings;
     opener.onclick = show;
-    (flyBoot || document.body).append(opener);
+    if (opener.classList.contains("rr-privacy--inline")) {
+      let observedFooter;
+      const footerObserver = new MutationObserver(() => {
+        if (observedFooter && !observedFooter.contains(opener))
+          observedFooter.append(opener);
+      });
+      const place = () => {
+        const footer = document.querySelector("footer");
+        if (footer !== observedFooter) {
+          footerObserver.disconnect();
+          observedFooter = footer;
+          if (footer) footerObserver.observe(footer, { childList: true });
+        }
+        const target = footer || document.body;
+        if (opener.parentElement !== target) target.append(opener);
+      };
+      const root = document.querySelector("#root");
+      if (root) new MutationObserver(place).observe(root, { childList: true });
+      if (document.readyState === "complete") requestAnimationFrame(place);
+      else
+        addEventListener("load", () => requestAnimationFrame(place), {
+          once: true,
+        });
+    } else (flyBoot || document.body).append(opener);
     if (flyBoot) {
       const observer = new MutationObserver(() => {
         if (!flyBoot.hidden) return;
