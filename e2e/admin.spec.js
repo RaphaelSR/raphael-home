@@ -29,7 +29,7 @@ test("admin: unauthenticated visitors cannot request reports", async ({
   });
   await page.goto("/admin/");
   await expect(
-    page.getByRole("heading", { name: "Seus dados, só para você." }),
+    page.getByRole("heading", { name: "Analytics", exact: true }),
   ).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
     "content",
