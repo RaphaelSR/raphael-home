@@ -79,7 +79,7 @@ function useHeader() {
 }
 function Header({
   language,
-  theme,
+  resolvedTheme,
   changeLanguage,
   changeTheme,
   t,
@@ -139,18 +139,18 @@ function Header({
           <fieldset
             className="preference-control theme-control"
             style={{
-              "--selection": ["light", "system", "dark"].indexOf(theme),
+              "--selection": ["light", "dark"].indexOf(resolvedTheme),
             }}
           >
             <legend className="sr-only">{t.theme}</legend>
             <span className="preference-highlight" aria-hidden="true" />
-            {["light", "system", "dark"].map((value) => (
+            {["light", "dark"].map((value) => (
               <label key={value} title={t[value]}>
                 <input
                   type="radio"
                   name="theme"
                   value={value}
-                  checked={theme === value}
+                  checked={resolvedTheme === value}
                   onChange={() => changeTheme(value)}
                   aria-label={t[value]}
                 />
@@ -168,13 +168,8 @@ function Header({
                       <circle cx="12" cy="12" r="4" />
                       <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
                     </>
-                  ) : value === "dark" ? (
-                    <path d="M20.5 14.3A9 9 0 0 1 9.7 3.5a9 9 0 1 0 10.8 10.8Z" />
                   ) : (
-                    <>
-                      <rect x="3" y="4" width="18" height="13" rx="2" />
-                      <path d="M8 21h8m-4-4v4" />
-                    </>
+                    <path d="M20.5 14.3A9 9 0 0 1 9.7 3.5a9 9 0 1 0 10.8 10.8Z" />
                   )}
                 </svg>
               </label>
@@ -191,7 +186,7 @@ function Header({
   );
 }
 export default function App({ initialLanguage = "en" }) {
-  const { language, theme, changeLanguage, changeTheme } =
+  const { language, resolvedTheme, changeLanguage, changeTheme } =
     usePreferences(initialLanguage);
   const t = messages[language];
   const [copyStatus, setCopyStatus] = useState(null);
@@ -211,7 +206,7 @@ export default function App({ initialLanguage = "en" }) {
       </a>
       <Header
         language={language}
-        theme={theme}
+        resolvedTheme={resolvedTheme}
         changeLanguage={changeLanguage}
         changeTheme={changeTheme}
         t={t}
