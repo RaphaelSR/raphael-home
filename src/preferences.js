@@ -64,7 +64,7 @@ export function usePreferences(initialLanguage) {
   }, [theme]);
   return {
     language,
-    resolvedTheme,
+    resolvedTheme: theme === "system" ? resolvedTheme : theme,
     changeLanguage: (value) => {
       history.pushState(
         null,
