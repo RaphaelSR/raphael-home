@@ -13,4 +13,5 @@ export const sites = {
   "snake.raphaelrocha.com": "Snake",
   "flybrain.raphaelrocha.com": "Fly Brain Bench",
   "basilica.raphaelrocha.com": "Basílica de Nazaré",
+  "cantinho.raphaelrocha.com": "Cantinho",
 };

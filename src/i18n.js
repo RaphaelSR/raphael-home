@@ -37,6 +37,8 @@ export const messages = {
       basilica:
         "Miniatura 3D da Basílica de Nazaré, em Belém, com construção animada e câmeras de detalhe. Uma interpretação estilizada em Three.js.",
       geometry: "Um estúdio para explorar formas, materiais e animação 3D.",
+      cantinho:
+        "Crie casas em 3D, dos cômodos e móveis à fachada e à luz do dia.",
       trivia: "Perguntas e respostas para jogar, competir e aprender em grupo.",
       mimica: "Um jogo para reunir pessoas. Um único celular, a turma toda.",
       snake: "Uma versão para a web do clássico jogo da cobra.",
@@ -86,6 +88,8 @@ export const messages = {
       basilica:
         "A 3D miniature of the Basilica of Nazaré in Belém, with animated construction and detail cameras. A stylized interpretation in Three.js.",
       geometry: "A studio for exploring shapes, materials and 3D animation.",
+      cantinho:
+        "Create 3D homes, from rooms and furniture to façades and daylight.",
       trivia: "Questions and answers to play, compete and learn together.",
       mimica: "A game that brings people together. One phone, the whole group.",
       snake: "A web version of the classic snake game.",
@@ -135,6 +139,8 @@ export const messages = {
       basilica:
         "Miniatura 3D de la Basílica de Nazaré, en Belém, con construcción animada y cámaras de detalle. Una interpretación estilizada en Three.js.",
       geometry: "Un estudio para explorar formas, materiales y animación 3D.",
+      cantinho:
+        "Crea casas en 3D, desde habitaciones y muebles hasta fachadas y luz natural.",
       trivia:
         "Preguntas y respuestas para jugar, competir y aprender en grupo.",
       mimica:
