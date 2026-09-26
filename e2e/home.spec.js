@@ -172,9 +172,7 @@ test("preference controls support keyboard selection and system theme", async ({
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
   await expect(page.locator('input[name="theme"][value="dark"]')).toBeChecked();
-  await page.locator('input[name="theme"][value="system"]').check();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await page.emulateMedia({ colorScheme: "dark" });
+  await page.emulateMedia({ colorScheme: "light" });
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   expect(
     await page

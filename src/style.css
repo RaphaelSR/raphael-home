@@ -424,36 +424,34 @@ footer > span {
 .preference-control {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(3, 40px);
+  grid-template-columns: repeat(3, 30px);
   padding: 2px;
   margin: 0;
   min-width: 0;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: color-mix(in srgb, var(--subtle) 70%, transparent);
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .preference-highlight {
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 999px;
   background: var(--bg);
-  box-shadow:
-    inset 0 0 0 1px var(--line),
-    0 2px 5px #0000000a;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 60%, transparent);
   transform: translateX(calc(var(--selection) * 100%));
-  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
 .preference-control label {
   position: relative;
   display: grid;
   place-items: center;
-  height: 40px;
+  height: 30px;
   color: var(--muted);
   cursor: pointer;
   border-radius: 999px;
@@ -481,8 +479,8 @@ footer > span {
   outline-offset: 2px;
 }
 .preference-control svg {
-  width: 17px;
-  height: 17px;
+  width: 14px;
+  height: 14px;
   pointer-events: none;
 }
 .preference-control label span {
@@ -833,4 +831,8 @@ html {
 
 .locale-links {
   margin-top: 1.5rem;
+}
+
+.theme-control {
+  grid-template-columns: repeat(2, 30px);
 }
