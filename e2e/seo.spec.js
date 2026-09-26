@@ -11,7 +11,7 @@ for (const locale of ["en", "pt", "es"]) {
     const response = await page.goto(`${base}/home/${locale}/`);
     expect(response.status()).toBe(200);
     await expect(page.locator("h1")).toHaveText("Raphael Rocha.");
-    await expect(page.locator(".project")).toHaveCount(6);
+    await expect(page.locator(".project")).toHaveCount(7);
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
