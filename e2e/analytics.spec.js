@@ -94,3 +94,27 @@ test("analytics: admin and Do Not Track never initialize collection", async ({
   ).toBeVisible();
   expect(await page.evaluate(() => window.dataLayer)).toBeUndefined();
 });
+
+test("analytics: Cantinho uses its own privacy controls", async ({ page }) => {
+  await page.route("https://raphaelrocha.com/**", (route) => {
+    const url = new URL(route.request().url());
+    if (url.pathname === "/analytics.js")
+      return route.fulfill({
+        contentType: "application/javascript",
+        body: script,
+      });
+    return route.fulfill({ contentType: "text/css", body: "" });
+  });
+  await page.route("https://cantinho.raphaelrocha.com/**", (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: '<!doctype html><html lang="pt"><body><button onclick="window.rrAnalytics.openPrivacy()">Privacidade e cookies</button><script src="https://raphaelrocha.com/analytics.js"></script></body></html>',
+    }),
+  );
+  await page.goto("https://cantinho.raphaelrocha.com/");
+  await expect(page.locator(".rr-consent")).toBeVisible();
+  await expect(page.locator(".rr-privacy")).toHaveCount(0);
+  await page.getByRole("button", { name: "Recusar" }).click();
+  await page.getByRole("button", { name: "Privacidade e cookies" }).click();
+  await expect(page.locator(".rr-consent")).toBeVisible();
+});

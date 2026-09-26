@@ -9,6 +9,7 @@
     "snake.raphaelrocha.com",
     "flybrain.raphaelrocha.com",
     "basilica.raphaelrocha.com",
+    "cantinho.raphaelrocha.com",
   ]);
   if (
     !hosts.has(location.hostname) ||
@@ -63,6 +64,7 @@
   let banner;
   let opener;
   let flyBoot;
+  let returnFocus;
   function gtag() {
     window.dataLayer.push(arguments);
   }
@@ -152,10 +154,13 @@
     banner?.remove();
     if (value === "yes") start();
     else stop();
-    opener?.focus({ preventScroll: true });
+    (returnFocus?.isConnected ? returnFocus : opener)?.focus({
+      preventScroll: true,
+    });
   };
   const show = () => {
     if (banner?.isConnected) return;
+    returnFocus = document.activeElement;
     const language = (
       document.documentElement.lang || navigator.language
     ).slice(0, 2);
@@ -193,6 +198,14 @@
     style.rel = "stylesheet";
     style.href = "https://raphaelrocha.com/analytics.css?v=3";
     document.head.append(style);
+    if (location.hostname === "cantinho.raphaelrocha.com") {
+      if (consent() === "yes" && !dnt) start();
+      else {
+        stop();
+        if (!consent() && !dnt) show();
+      }
+      return;
+    }
     opener = document.createElement("button");
     opener.type = "button";
     opener.className = "rr-privacy";

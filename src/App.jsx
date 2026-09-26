@@ -15,6 +15,12 @@ const projects = [
     host: "3d.raphaelrocha.com",
   },
   {
+    id: "cantinho",
+    name: "Cantinho",
+    type: "tool",
+    host: "cantinho.raphaelrocha.com",
+  },
+  {
     id: "trivia",
     name: "Trivia",
     type: "game",
