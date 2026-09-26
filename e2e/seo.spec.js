@@ -49,7 +49,7 @@ test("SEO: explicit language wins over stored preference and history updates met
   await page.addInitScript(() => localStorage.setItem("home-language", "pt"));
   await page.goto("/home/en/");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  await page.locator("select").first().selectOption("es");
+  await page.locator('input[name="language"][value="es"]').check();
   await expect(page).toHaveURL(/\/home\/es\/$/);
   await expect(page).toHaveTitle(/Ingeniero/);
   await page.goBack();

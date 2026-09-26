@@ -18,6 +18,7 @@ const save = (key, value) => {
 export function usePreferences(initialLanguage) {
   const [language, setLanguage] = useState(initialLanguage);
   const [theme, setTheme] = useState("system");
+  const [resolvedTheme, setResolvedTheme] = useState("light");
   useEffect(() => {
     const applyLocation = () => {
       const pathLocale = location.pathname.match(/^\/home\/(en|pt|es)\/$/)?.[1];
@@ -52,8 +53,10 @@ export function usePreferences(initialLanguage) {
   useEffect(() => {
     const media = matchMedia("(prefers-color-scheme: dark)");
     const apply = () => {
-      document.documentElement.dataset.theme =
+      const next =
         theme === "system" ? (media.matches ? "dark" : "light") : theme;
+      document.documentElement.dataset.theme = next;
+      setResolvedTheme(next);
     };
     apply();
     media.addEventListener("change", apply);
@@ -61,7 +64,7 @@ export function usePreferences(initialLanguage) {
   }, [theme]);
   return {
     language,
-    theme,
+    resolvedTheme: theme === "system" ? resolvedTheme : theme,
     changeLanguage: (value) => {
       history.pushState(
         null,
