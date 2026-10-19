@@ -430,16 +430,14 @@ function Admin() {
                   />
                 )}
                 <div className="columns">
-                  <Bars
-                    title={
-                      host
-                        ? "Visualizações por domínio"
-                        : "Projetos na propriedade principal"
-                    }
-                    data={rows(currentReports[2])}
-                    unit="visualizações"
-                    onProject={host ? undefined : openProject}
-                  />
+                  {!host && (
+                    <Bars
+                      title="Projetos na propriedade principal"
+                      data={rows(currentReports[2])}
+                      unit="visualizações"
+                      onProject={openProject}
+                    />
+                  )}
                   <Bars
                     title="De onde chegam"
                     data={rows(currentReports[3])}
