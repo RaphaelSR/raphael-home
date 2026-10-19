@@ -67,3 +67,32 @@ test("admin: daily chart includes missing dates in the property timezone", async
   expect(data[4].values).toEqual([8, 3]);
   expect(dailyRows({ rows: [] }, 7)).toEqual([]);
 });
+
+test("admin: Lotcraft production uses its own property and excludes development hosts", async () => {
+  const { analyticsSource } = await import("../src/admin/config.js");
+  expect(analyticsSource("lotcraft.app").propertyId).toBe("557114748");
+  expect(analyticsSource("cantinho.raphaelrocha.com").propertyId).toBe(
+    "555394741",
+  );
+  const reports = buildReports(28, "lotcraft.app");
+  for (const report of reports) {
+    expect(report.dimensionFilter.filter.inListFilter.values).toEqual([
+      "lotcraft.app",
+      "www.lotcraft.app",
+      "cantinho.raphaelrocha.com",
+      "www.cantinho.raphaelrocha.com",
+    ]);
+  }
+  expect(analyticsSource().hosts).not.toContain("lotcraft.app");
+  expect(JSON.stringify(reports)).not.toMatch(
+    /pages\.dev|localhost|dev\.cantinho/,
+  );
+  const details = buildReports(28, "lotcraft.app", true);
+  expect(details).toHaveLength(3);
+  expect(details.map((report) => report.dimensions[0].name)).toEqual([
+    "pagePath",
+    "eventName",
+    "deviceCategory",
+  ]);
+  expect(() => buildReports(28, "", true)).toThrow();
+});

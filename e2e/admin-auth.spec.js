@@ -26,7 +26,12 @@ async function loginFixture(
     requests.push(route.request());
     return route.fulfill({
       status,
-      json: { reports: Array.from({ length: 5 }, () => ({ rows: [] })) },
+      json: {
+        reports: Array.from(
+          { length: route.request().postDataJSON().requests.length },
+          () => ({ rows: [] }),
+        ),
+      },
     });
   });
   await page.goto("/admin/");
@@ -45,7 +50,7 @@ test("admin: owner can read reports without persisting tokens; logout clears dat
   await page
     .getByRole("combobox", { name: "Projeto", exact: true })
     .selectOption("portfolio.raphaelrocha.com");
-  await expect.poll(() => requests.length).toBe(2);
+  await expect.poll(() => requests.length).toBe(3);
   expect(
     requests[1].postDataJSON().requests[0].dimensionFilter.filter.inListFilter
       .values,

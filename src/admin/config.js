@@ -13,5 +13,38 @@ export const sites = {
   "snake.raphaelrocha.com": "Snake",
   "flybrain.raphaelrocha.com": "Fly Brain Bench",
   "basilica.raphaelrocha.com": "Basílica de Nazaré",
-  "cantinho.raphaelrocha.com": "Cantinho",
+  "cantinho.raphaelrocha.com": "Lotcraft — histórico Cantinho",
+  "lotcraft.app": "Lotcraft",
 };
+
+// Production and development streams share a Lotcraft property; the hostname allowlist below excludes DEV.
+export const lotcraftPropertyId = "557114748";
+export function analyticsSource(host = "") {
+  if (host && !Object.hasOwn(sites, host)) throw new Error("Projeto inválido.");
+  const lotcraft = host === "lotcraft.app";
+  const historical = host === "cantinho.raphaelrocha.com";
+  return {
+    propertyId: lotcraft ? lotcraftPropertyId : config.propertyId,
+    label: lotcraft
+      ? "Lotcraft · produção"
+      : historical
+        ? "Histórico Cantinho · propriedade principal"
+        : "Propriedade principal · Raphael Rocha",
+    hosts: lotcraft
+      ? [
+          "lotcraft.app",
+          "www.lotcraft.app",
+          "cantinho.raphaelrocha.com",
+          "www.cantinho.raphaelrocha.com",
+        ]
+      : historical
+        ? [host, "www.cantinho.raphaelrocha.com"]
+        : host
+          ? [host]
+          : Object.keys(sites).filter((key) => key !== "lotcraft.app"),
+    url: host
+      ? `https://${lotcraft || historical ? "lotcraft.app" : host}`
+      : "https://raphaelrocha.com",
+    historical,
+  };
+}

@@ -10,7 +10,7 @@ Node 22.22.2 or newer. Run `npm ci`, `npm run dev` (localhost:3025), `npm run bu
 
 ## Implementation
 
-React and Vite, system fonts, no third-party embeds, analytics, backend or runtime API calls. Portuguese, English and Spanish use browser preferences with an English fallback. Theme follows the system unless manually selected; preferences remain usable if storage is unavailable. Essential navigation also works without JavaScript.
+React and Vite, system fonts, no third-party embeds or backend. Optional Google Analytics collection starts only after consent; the owner-only admin reads GA4 directly using an in-memory Google OAuth token. Portuguese, English and Spanish use browser preferences with an English fallback. Theme follows the system unless manually selected; preferences remain usable if storage is unavailable. Essential navigation also works without JavaScript.
 
 The header owns its scroll state so scrolling does not rerender the page content. Motion respects reduced-motion settings. Links to external projects are explicit HTTPS destinations. Discord copies the public username and reports clipboard errors accessibly.
 
@@ -37,3 +37,11 @@ data. The sitemap lists the canonical pages; visible footer links and `hreflang`
 connect all translations. `public/social-card.png` is a local 1200×630 sharing image.
 SEO tests cover HTML without JavaScript, language history and legacy routes.
 Search Console indexing and ranking require separate observation after publication.
+
+## Owner analytics dashboard
+
+`/admin/` uses Google sign-in and `analytics.readonly`; tokens and reports remain in memory and are cleared on sign-out/expiry. `src/admin/config.js` lists the permitted properties and domains. Each project row opens its own report, with pages (without query strings), events, device categories and a hostname breakdown in addition to daily views, users, sessions, countries and channels.
+
+The principal overview reads GA4 property `555394741` for the original site network. Its `cantinho.raphaelrocha.com` entry is explicitly historical. Lotcraft production reads property `557114748`, documented in the Lotcraft repository's `docs/analytics.md`, for `lotcraft.app`, `www.lotcraft.app` and the two legacy Cantinho production hostnames. Development/preview hosts are excluded. These are different properties: historical and current totals are displayed separately, never added or presented as unique cross-property users. The dashboard shows its source and hostname coverage. Missing permissions/API failures display an error, not invented zero counts. Confirm current data and property access with the owner account after publication.
+
+The public homepage displays Lotcraft and links to `https://lotcraft.app`; its stable internal content key remains `cantinho` to preserve translations. The parent site's `public/analytics.js` collector is not installed on Lotcraft; Lotcraft owns its consent and tracking, so this change does not add duplicate tracking or broaden consent.

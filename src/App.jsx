@@ -16,9 +16,9 @@ const projects = [
   },
   {
     id: "cantinho",
-    name: "Cantinho",
+    name: "Lotcraft",
     type: "tool",
-    host: "cantinho.raphaelrocha.com",
+    host: "lotcraft.app",
   },
   {
     id: "trivia",
