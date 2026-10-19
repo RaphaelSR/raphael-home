@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { config, sites } from "./config";
+import { config, sites, analyticsSource } from "./config";
 import { getAnalytics, rows, dailyRows } from "./analytics";
+import ProjectDetails from "./ProjectDetails";
 import "./style.css";
 const number = (n) => new Intl.NumberFormat("pt-BR").format(n);
-function Bars({ title, data, unit }) {
+function Bars({ title, data, unit, onProject }) {
   const max = Math.max(1, ...data.map((r) => r.values[0]));
   return (
     <section className="panel">
@@ -14,9 +15,20 @@ function Bars({ title, data, unit }) {
           {data.map((r) => (
             <li key={r.labels[0]}>
               <div>
-                <span>
-                  {sites[r.labels[0]] || r.labels[0] || "Não informado"}
-                </span>
+                {onProject ? (
+                  <button
+                    className="project-link"
+                    onClick={() => onProject(r.labels[0])}
+                    aria-label={`Ver detalhes de ${sites[r.labels[0]] || r.labels[0]}`}
+                  >
+                    {sites[r.labels[0]] || r.labels[0]}{" "}
+                    <span aria-hidden="true">→</span>
+                  </button>
+                ) : (
+                  <span>
+                    {sites[r.labels[0]] || r.labels[0] || "Não informado"}
+                  </span>
+                )}
                 <strong>
                   {number(r.values[0])} <small>{unit}</small>
                 </strong>
@@ -128,12 +140,22 @@ function Admin() {
   const [ready, setReady] = useState(false);
   const [session, setSession] = useState(null);
   const [reports, setReports] = useState(null);
+  const [loadedScope, setLoadedScope] = useState(null);
+  const title = useRef(null);
   const [days, setDays] = useState(28);
   const [host, setHost] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [updated, setUpdated] = useState(null);
+  const source = analyticsSource(host);
+  const scope = `${days}:${host}:${refresh}`;
+  const currentReports = loadedScope === scope ? reports : null;
+  const openProject = (key) => {
+    if (key && !Object.hasOwn(sites, key)) return;
+    setHost(key);
+    requestAnimationFrame(() => title.current?.focus());
+  };
   const client = useRef(null);
   const authAttempt = useRef(0);
   useEffect(() => {
@@ -218,10 +240,12 @@ function Admin() {
     setLoading(true);
     setError("");
     setReports(null);
+    setLoadedScope(null);
     getAnalytics(session.token, days, host, controller.signal)
       .then((data) => {
         if (!controller.signal.aborted) {
           setReports(data);
+          setLoadedScope(`${days}:${host}:${refresh}`);
           setUpdated(new Date());
         }
       })
@@ -233,7 +257,9 @@ function Admin() {
       });
     return () => controller.abort();
   }, [session, days, host, refresh]);
-  const totals = reports ? rows(reports[0])[0]?.values || [0, 0, 0, 0] : null;
+  const totals = currentReports
+    ? rows(currentReports[0])[0]?.values || [0, 0, 0, 0]
+    : null;
   return (
     <div className={`admin-shell${session ? "" : " signed-out"}`}>
       <a className="skip" href="#dashboard">
@@ -259,7 +285,9 @@ function Admin() {
       <main id="dashboard" tabIndex={-1}>
         {session && (
           <div className="intro">
-            <h1>Visão geral</h1>
+            <h1 ref={title} tabIndex={-1}>
+              {host ? sites[host] : "Visão geral"}
+            </h1>
           </div>
         )}
         {error && (
@@ -303,7 +331,7 @@ function Admin() {
               <label>
                 Projeto
                 <select value={host} onChange={(e) => setHost(e.target.value)}>
-                  <option value="">Todos os projetos</option>
+                  <option value="">Propriedade principal</option>
                   {Object.entries(sites).map(([key, label]) => (
                     <option value={key} key={key}>
                       {label}
@@ -318,6 +346,52 @@ function Admin() {
                 Atualizar
               </button>
             </div>
+            <section
+              className="panel source-info"
+              aria-label="Origem dos dados"
+            >
+              <h2>{source.label}</h2>
+              <p className="muted small">
+                Propriedade GA4 {source.propertyId}.{" "}
+                {host
+                  ? `Domínios incluídos: ${source.hosts.join(", ")}.`
+                  : "Esta visão mostra os sites da propriedade principal e o histórico do endereço Cantinho. Lotcraft.app tem uma propriedade própria e não está incluído nestes totais."}
+              </p>
+              <div className="project-actions">
+                {host && (
+                  <button onClick={() => openProject("")}>
+                    Voltar à visão geral
+                  </button>
+                )}
+                {host !== "lotcraft.app" && (
+                  <button onClick={() => openProject("lotcraft.app")}>
+                    Abrir Lotcraft · lotcraft.app
+                  </button>
+                )}
+                {host === "lotcraft.app" && (
+                  <button
+                    onClick={() => openProject("cantinho.raphaelrocha.com")}
+                  >
+                    Ver histórico Cantinho
+                  </button>
+                )}
+                {host && (
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Abrir site ↗
+                  </a>
+                )}
+              </div>
+              {source.historical && (
+                <p className="muted small">
+                  Histórico da coleta antiga. Não representa o total atual do
+                  Lotcraft e não é somado à propriedade atual.
+                </p>
+              )}
+            </section>
             <p role="status" className="muted small">
               {loading
                 ? "Consultando dados…"
@@ -325,7 +399,7 @@ function Admin() {
                   ? `Atualizado às ${updated.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`
                   : ""}
             </p>
-            {reports && (
+            {currentReports && (
               <>
                 <div className="stats">
                   {[
@@ -344,21 +418,36 @@ function Admin() {
                     </section>
                   ))}
                 </div>
-                <Timeline data={dailyRows(reports[1], days)} />
+                <Timeline data={dailyRows(currentReports[1], days)} />
+                {host && (
+                  <ProjectDetails
+                    key={scope}
+                    token={session.token}
+                    days={days}
+                    host={host}
+                    refresh={refresh}
+                    overview={currentReports[2]}
+                  />
+                )}
                 <div className="columns">
                   <Bars
-                    title="Projetos mais visitados"
-                    data={rows(reports[2])}
+                    title={
+                      host
+                        ? "Visualizações por domínio"
+                        : "Projetos na propriedade principal"
+                    }
+                    data={rows(currentReports[2])}
                     unit="visualizações"
+                    onProject={host ? undefined : openProject}
                   />
                   <Bars
                     title="De onde chegam"
-                    data={rows(reports[3])}
+                    data={rows(currentReports[3])}
                     unit="usuários"
                   />
                   <Bars
                     title="Como encontram os sites"
-                    data={rows(reports[4])}
+                    data={rows(currentReports[4])}
                     unit="sessões"
                   />
                   <section className="panel note">
