@@ -79,7 +79,7 @@ function useHeader() {
 }
 function Header({
   language,
-  theme,
+  resolvedTheme,
   changeLanguage,
   changeTheme,
   t,
@@ -116,27 +116,65 @@ function Header({
           </a>
         </nav>
         <div className="preferences">
-          <label>
-            <span className="sr-only">{t.language}</span>
-            <select
-              value={language}
-              onChange={(e) => changeLanguage(e.target.value)}
-            >
-              {Object.entries(languages).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>
-            <span className="sr-only">{t.theme}</span>
-            <select value={theme} onChange={(e) => changeTheme(e.target.value)}>
-              <option value="system">◐ {t.system}</option>
-              <option value="light">☀ {t.light}</option>
-              <option value="dark">☾ {t.dark}</option>
-            </select>
-          </label>
+          <fieldset
+            className="preference-control language-control"
+            style={{ "--selection": Object.keys(languages).indexOf(language) }}
+          >
+            <legend className="sr-only">{t.language}</legend>
+            <span className="preference-highlight" aria-hidden="true" />
+            {Object.entries(languages).map(([value, label]) => (
+              <label key={value} title={label}>
+                <input
+                  type="radio"
+                  name="language"
+                  value={value}
+                  checked={language === value}
+                  onChange={() => changeLanguage(value)}
+                  aria-label={`${value.toUpperCase()} — ${label}`}
+                />
+                <span>{value.toUpperCase()}</span>
+              </label>
+            ))}
+          </fieldset>
+          <fieldset
+            className="preference-control theme-control"
+            style={{
+              "--selection": ["light", "dark"].indexOf(resolvedTheme),
+            }}
+          >
+            <legend className="sr-only">{t.theme}</legend>
+            <span className="preference-highlight" aria-hidden="true" />
+            {["light", "dark"].map((value) => (
+              <label key={value} title={t[value]}>
+                <input
+                  type="radio"
+                  name="theme"
+                  value={value}
+                  checked={resolvedTheme === value}
+                  onChange={() => changeTheme(value)}
+                  aria-label={t[value]}
+                />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  {value === "light" ? (
+                    <>
+                      <circle cx="12" cy="12" r="4" />
+                      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+                    </>
+                  ) : (
+                    <path d="M20.5 14.3A9 9 0 0 1 9.7 3.5a9 9 0 1 0 10.8 10.8Z" />
+                  )}
+                </svg>
+              </label>
+            ))}
+          </fieldset>
         </div>
         <span
           className="scroll-progress"
@@ -148,7 +186,7 @@ function Header({
   );
 }
 export default function App({ initialLanguage = "en" }) {
-  const { language, theme, changeLanguage, changeTheme } =
+  const { language, resolvedTheme, changeLanguage, changeTheme } =
     usePreferences(initialLanguage);
   const t = messages[language];
   const [copyStatus, setCopyStatus] = useState(null);
@@ -168,7 +206,7 @@ export default function App({ initialLanguage = "en" }) {
       </a>
       <Header
         language={language}
-        theme={theme}
+        resolvedTheme={resolvedTheme}
         changeLanguage={changeLanguage}
         changeTheme={changeTheme}
         t={t}

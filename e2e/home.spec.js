@@ -9,8 +9,8 @@ for (const language of ["pt", "en", "es"]) {
       const errors = [];
       page.on("pageerror", (error) => errors.push(error.message));
       await page.goto("/");
-      await page.locator("select").nth(0).selectOption(language);
-      await page.locator("select").nth(1).selectOption(theme);
+      await page.locator(`input[name="language"][value="${language}"]`).check();
+      await page.locator(`input[name="theme"][value="${theme}"]`).check();
       await expect(page.locator("html")).toHaveAttribute(
         "lang",
         language === "pt" ? "pt-BR" : language,
@@ -70,7 +70,7 @@ test("system theme, language fallback and unavailable storage", async ({
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.emulateMedia({ colorScheme: "light" });
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await page.locator("select").first().selectOption("es");
+  await page.locator('input[name="language"][value="es"]').check();
   await expect(page.locator("html")).toHaveAttribute("lang", "es");
   await context.close();
 });
@@ -157,4 +157,27 @@ test("essential links remain accessible without JavaScript", async ({
     page.getByRole("link", { name: /Fly Brain Bench/ }),
   ).toBeVisible();
   await context.close();
+});
+
+test("preference controls support keyboard selection and system theme", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
+  await page.goto("/home/en/");
+  const english = page.locator('input[name="language"][value="en"]');
+  await english.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator("html")).toHaveAttribute("lang", "es");
+  await page.locator('input[name="theme"][value="dark"]').check();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.reload();
+  await expect(page.locator('input[name="theme"][value="dark"]')).toBeChecked();
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  expect(
+    await page
+      .locator(".preference-highlight")
+      .first()
+      .evaluate((el) => getComputedStyle(el).transitionDuration),
+  ).toBe("0s");
 });

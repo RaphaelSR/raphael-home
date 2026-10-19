@@ -421,26 +421,76 @@ footer > span {
   gap: 8px;
   align-items: center;
 }
-.preferences select {
-  font:
-    11px -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-  color: var(--text);
-  background: var(--subtle);
+.preference-control {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  padding: 2px;
+  margin: 0;
+  min-width: 0;
   border: 1px solid var(--line);
-  border-radius: 5px;
-  min-height: 36px;
-  max-width: 145px;
-  padding: 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--subtle) 70%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.preference-highlight {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 60%, transparent);
+  transform: translateX(calc(var(--selection) * 100%));
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.preference-control label {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 30px;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: color 180ms;
+}
+.preference-control input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  margin: 0;
   cursor: pointer;
 }
-.preferences select:focus-visible,
+.preference-control label:has(input:checked),
+.preference-control label:hover {
+  color: var(--text);
+}
+.preference-control label:has(input:focus-visible),
 .discord:focus-visible {
   outline: 2px solid var(--link);
-  outline-offset: 4px;
+  outline-offset: 2px;
+}
+.preference-control svg {
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+.preference-control label span {
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preference-highlight,
+  .preference-control label {
+    transition: none;
+  }
 }
 .summary {
   max-width: 510px;
@@ -500,9 +550,6 @@ button {
     flex-basis: 100%;
     justify-content: flex-end;
     margin-top: 4px;
-  }
-  .preferences select {
-    min-height: 40px;
   }
   .header nav {
     gap: 16px;
@@ -637,7 +684,7 @@ html {
   opacity: 0.65;
 }
 .header a:focus-visible,
-.header select:focus-visible {
+.header input:focus-visible {
   outline-offset: 2px;
 }
 .back-top {
@@ -667,9 +714,6 @@ html {
     margin-top: 0;
     justify-content: flex-end;
   }
-  .header.is-compact .preferences select {
-    background: var(--panel);
-  }
   .header .home-mark {
     min-height: 40px;
   }
@@ -687,9 +731,6 @@ html {
   }
   .header .preferences {
     justify-content: flex-end;
-  }
-  .preferences select {
-    max-width: 140px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -790,4 +831,8 @@ html {
 
 .locale-links {
   margin-top: 1.5rem;
+}
+
+.theme-control {
+  grid-template-columns: repeat(2, 30px);
 }
