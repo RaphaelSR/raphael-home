@@ -1,12 +1,13 @@
-import { config, sites } from "./config";
-export function buildReports(days, host) {
-  if (![7, 28, 90].includes(days) || (host && !Object.hasOwn(sites, host)))
+import { analyticsSource } from "./config";
+export function buildReports(days, host, details = false) {
+  if (![7, 28, 90].includes(days) || (details && !host))
     throw new Error("Filtro inválido.");
+  const source = analyticsSource(host);
   const dateRanges = [{ startDate: `${days - 1}daysAgo`, endDate: "today" }];
   const dimensionFilter = {
     filter: {
       fieldName: "hostName",
-      inListFilter: { values: host ? [host] : Object.keys(sites) },
+      inListFilter: { values: source.hosts },
     },
   };
   const report = (dimensions, metrics, limit = 100) => ({
@@ -22,6 +23,12 @@ export function buildReports(days, host) {
           ? [{ metric: { metricName: metrics[0] }, desc: true }]
           : [],
   });
+  if (details)
+    return [
+      report(["pagePath"], ["screenPageViews", "activeUsers"], 20),
+      report(["eventName"], ["eventCount"], 20),
+      report(["deviceCategory"], ["activeUsers"], 10),
+    ];
   return [
     report(
       [],
@@ -33,18 +40,20 @@ export function buildReports(days, host) {
     report(["sessionDefaultChannelGroup"], ["sessions"], 10),
   ];
 }
-export async function getAnalytics(token, days, host, signal) {
-  if (!/^\d+$/.test(config.propertyId))
+export async function getAnalytics(token, days, host, signal, details = false) {
+  const source = analyticsSource(host);
+  const requests = buildReports(days, host, details);
+  if (!/^\d+$/.test(source.propertyId))
     throw new Error("A propriedade do Analytics ainda não foi configurada.");
   const response = await fetch(
-    `https://analyticsdata.googleapis.com/v1beta/properties/${config.propertyId}:batchRunReports`,
+    `https://analyticsdata.googleapis.com/v1beta/properties/${source.propertyId}:batchRunReports`,
     {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ requests: buildReports(days, host) }),
+      body: JSON.stringify({ requests }),
       signal,
       cache: "no-store",
       credentials: "omit",
@@ -65,7 +74,10 @@ export async function getAnalytics(token, days, host, signal) {
       "Não foi possível consultar o Analytics. Tente novamente em instantes.",
     );
   const result = await response.json();
-  if (!Array.isArray(result.reports) || result.reports.length !== 5)
+  if (
+    !Array.isArray(result.reports) ||
+    result.reports.length !== requests.length
+  )
     throw new Error("O Analytics devolveu um relatório incompleto.");
   return result.reports;
 }
