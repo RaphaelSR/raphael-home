@@ -30,12 +30,12 @@ async function fixture(page, denied = false) {
         reports: requests.map((request) => {
           const dimension = request.dimensions[0]?.name;
           const rows = !dimension
-            ? [row([], lotcraft ? [17, 20, 42, 0.6] : [30, 40, 134, 0.5])]
+            ? [row([], lotcraft ? [17, 20, 42, 0.6] : [30, 40, 900, 0.5])]
             : dimension === "hostName"
               ? [
                   row(
                     [lotcraft ? "lotcraft.app" : "cantinho.raphaelrocha.com"],
-                    lotcraft ? [42, 17, 20] : [134, 30, 40],
+                    lotcraft ? [42, 17, 20] : [900, 30, 40],
                   ),
                 ]
               : dimension === "pagePath"
@@ -105,7 +105,7 @@ test("project rows open isolated details and Lotcraft keeps current and historic
     page.getByRole("region", { name: "Origem dos dados" }),
   ).toContainText("557114748");
   await expect(page.locator(".stats")).toContainText("42");
-  await expect(page.locator(".stats")).not.toContainText("134");
+  await expect(page.locator(".stats")).not.toContainText("900");
   const current = calls.filter((call) => call.lotcraft);
   expect(current).toHaveLength(2);
   expect(current[0].requests).toHaveLength(5);
@@ -135,7 +135,7 @@ test("project rows open isolated details and Lotcraft keeps current and historic
     fullPage: true,
   });
   await page.getByRole("button", { name: "Ver histórico Cantinho" }).click();
-  await expect(page.locator(".stats")).toContainText("134");
+  await expect(page.locator(".stats")).toContainText("900");
   await page.getByRole("button", { name: "Sair", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Eventos registrados" }),
