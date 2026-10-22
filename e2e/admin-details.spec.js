@@ -23,19 +23,40 @@ async function fixture(page, denied = false) {
   await page.route("https://analyticsdata.googleapis.com/**", (route) => {
     const requests = route.request().postDataJSON().requests;
     const lotcraft = route.request().url().includes("557114748");
-    calls.push({ lotcraft, requests });
-    if (lotcraft && denied) return route.fulfill({ status: 403, json: {} });
+    const rockit = route.request().url().includes("560170762");
+    calls.push({ lotcraft, rockit, requests });
+    if ((lotcraft || rockit) && denied)
+      return route.fulfill({ status: 403, json: {} });
     return route.fulfill({
       json: {
         reports: requests.map((request) => {
           const dimension = request.dimensions[0]?.name;
           const rows = !dimension
-            ? [row([], lotcraft ? [17, 20, 42, 0.6] : [30, 40, 900, 0.5])]
+            ? [
+                row(
+                  [],
+                  rockit
+                    ? [5, 6, 12, 0.5]
+                    : lotcraft
+                      ? [17, 20, 42, 0.6]
+                      : [30, 40, 900, 0.5],
+                ),
+              ]
             : dimension === "hostName"
               ? [
                   row(
-                    [lotcraft ? "lotcraft.app" : "cantinho.raphaelrocha.com"],
-                    lotcraft ? [42, 17, 20] : [900, 30, 40],
+                    [
+                      rockit
+                        ? "rockitsolutions.com.br"
+                        : lotcraft
+                          ? "lotcraft.app"
+                          : "cantinho.raphaelrocha.com",
+                    ],
+                    rockit
+                      ? [12, 5, 6]
+                      : lotcraft
+                        ? [42, 17, 20]
+                        : [900, 30, 40],
                   ),
                 ]
               : dimension === "pagePath"
@@ -166,4 +187,54 @@ test("homepage identifies Lotcraft and opens its current domain", async ({
   await page.goto("/home/pt/");
   const project = page.getByRole("link", { name: /Lotcraft/ });
   await expect(project).toHaveAttribute("href", "https://lotcraft.app/");
+});
+
+test("Rockit uses its own property and only its production domains", async ({
+  page,
+}) => {
+  const calls = await fixture(page);
+  expect(
+    calls[0].requests[0].dimensionFilter.filter.inListFilter.values,
+  ).not.toContain("rockitsolutions.com.br");
+  await page
+    .getByRole("button", {
+      name: "Abrir Rockit Solutions · rockitsolutions.com.br",
+    })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Rockit Solutions", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Eventos registrados" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("region", { name: "Origem dos dados" }),
+  ).toContainText("560170762");
+  await expect(page.locator(".stats")).toContainText("12");
+  await expect(page.locator(".stats")).not.toContainText("900");
+  const rockit = calls.filter((call) => call.rockit);
+  expect(rockit).toHaveLength(2);
+  for (const call of rockit)
+    for (const request of call.requests)
+      expect(request.dimensionFilter.filter.inListFilter.values).toEqual([
+        "rockitsolutions.com.br",
+        "www.rockitsolutions.com.br",
+      ]);
+  await page.getByRole("button", { name: "Voltar à visão geral" }).click();
+  await expect(
+    page.getByRole("region", { name: "Origem dos dados" }),
+  ).toContainText("555394741");
+});
+
+test("Rockit permission failure does not show another property's data", async ({
+  page,
+}) => {
+  await fixture(page, true);
+  await page
+    .getByRole("button", {
+      name: "Abrir Rockit Solutions · rockitsolutions.com.br",
+    })
+    .click();
+  await expect(page.getByRole("alert")).toContainText("não tem permissão");
+  await expect(page.locator(".stats")).toHaveCount(0);
 });
