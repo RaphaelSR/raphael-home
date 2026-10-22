@@ -355,7 +355,7 @@ function Admin() {
                 Propriedade GA4 {source.propertyId}.{" "}
                 {host
                   ? `Domínios incluídos: ${source.hosts.join(", ")}.`
-                  : "Esta visão mostra os sites da propriedade principal e o histórico do endereço Cantinho. Lotcraft.app tem uma propriedade própria e não está incluído nestes totais."}
+                  : "Esta visão mostra os sites da propriedade principal e o histórico do endereço Cantinho. Lotcraft e Rockit Solutions têm propriedades próprias e não estão incluídos nestes totais."}
               </p>
               <div className="project-actions">
                 {host && (
@@ -366,6 +366,11 @@ function Admin() {
                 {host !== "lotcraft.app" && (
                   <button onClick={() => openProject("lotcraft.app")}>
                     Abrir Lotcraft · lotcraft.app
+                  </button>
+                )}
+                {host !== "rockitsolutions.com.br" && (
+                  <button onClick={() => openProject("rockitsolutions.com.br")}>
+                    Abrir Rockit Solutions · rockitsolutions.com.br
                   </button>
                 )}
                 {host === "lotcraft.app" && (

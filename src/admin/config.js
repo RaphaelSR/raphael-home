@@ -15,12 +15,22 @@ export const sites = {
   "basilica.raphaelrocha.com": "Basílica de Nazaré",
   "cantinho.raphaelrocha.com": "Lotcraft — histórico Cantinho",
   "lotcraft.app": "Lotcraft",
+  "rockitsolutions.com.br": "Rockit Solutions",
 };
 
 // Production and development streams share a Lotcraft property; the hostname allowlist below excludes DEV.
 export const lotcraftPropertyId = "557114748";
+export const rockitPropertyId = "560170762";
 export function analyticsSource(host = "") {
   if (host && !Object.hasOwn(sites, host)) throw new Error("Projeto inválido.");
+  if (host === "rockitsolutions.com.br")
+    return {
+      propertyId: rockitPropertyId,
+      label: "Rockit Solutions · produção",
+      hosts: ["rockitsolutions.com.br", "www.rockitsolutions.com.br"],
+      url: "https://rockitsolutions.com.br",
+      historical: false,
+    };
   const lotcraft = host === "lotcraft.app";
   const historical = host === "cantinho.raphaelrocha.com";
   return {
@@ -41,7 +51,10 @@ export function analyticsSource(host = "") {
         ? [host, "www.cantinho.raphaelrocha.com"]
         : host
           ? [host]
-          : Object.keys(sites).filter((key) => key !== "lotcraft.app"),
+          : Object.keys(sites).filter(
+              (key) =>
+                !["lotcraft.app", "rockitsolutions.com.br"].includes(key),
+            ),
     url: host
       ? `https://${lotcraft || historical ? "lotcraft.app" : host}`
       : "https://raphaelrocha.com",
