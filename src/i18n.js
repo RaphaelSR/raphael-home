@@ -50,10 +50,6 @@ export const messages = {
       "Experiência profissional, produtos em que contribuí e as tecnologias com que trabalho.",
     visit: "Visitar o portfólio",
     contacts: "Links de contato",
-    copy: "Copiar usuário do Discord: raphaelsr",
-    copied: "Usuário do Discord copiado.",
-    copyFailed: "Não foi possível copiar. Usuário do Discord: raphaelsr",
-    email: "E-mail",
   },
   en: {
     currentWork: "Currently building",
@@ -101,10 +97,6 @@ export const messages = {
       "Professional experience, products I have contributed to and the technologies I work with.",
     visit: "Visit my portfolio",
     contacts: "Contact links",
-    copy: "Copy Discord username: raphaelsr",
-    copied: "Discord username copied.",
-    copyFailed: "Could not copy. Discord username: raphaelsr",
-    email: "Email",
   },
   es: {
     currentWork: "En desarrollo",
@@ -154,9 +146,5 @@ export const messages = {
       "Experiencia profesional, productos en los que he contribuido y las tecnologías con las que trabajo.",
     visit: "Visitar el portafolio",
     contacts: "Enlaces de contacto",
-    copy: "Copiar usuario de Discord: raphaelsr",
-    copied: "Usuario de Discord copiado.",
-    copyFailed: "No se pudo copiar. Usuario de Discord: raphaelsr",
-    email: "Correo",
   },
 };

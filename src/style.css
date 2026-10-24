@@ -437,8 +437,7 @@ footer > span {
   padding: 7px;
   cursor: pointer;
 }
-.preferences select:focus-visible,
-.discord:focus-visible {
+.preferences select:focus-visible {
   outline: 2px solid var(--link);
   outline-offset: 4px;
 }
@@ -457,35 +456,13 @@ footer nav {
   gap: 18px;
   align-items: center;
 }
-footer nav a,
-footer nav button {
+footer nav a {
   min-height: 36px;
   display: inline-flex;
   align-items: center;
   gap: 5px;
 }
-.discord {
-  font: inherit;
-  color: inherit;
-  border: 0;
-  background: transparent;
-  padding: 5px 0;
-  cursor: pointer;
-}
-.discord span {
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-}
-.discord:hover {
-  color: var(--link);
-}
-.copy-status {
-  flex-basis: 100%;
-  margin: 0;
-  min-height: 16px;
-  color: var(--text);
-  text-align: right;
-  font-size: 12px;
-}
+
 select,
 button {
   -webkit-tap-highlight-color: transparent;
@@ -516,12 +493,8 @@ button {
   .portfolio .text-link {
     white-space: normal;
   }
-  footer nav a,
-  footer nav button {
+  footer nav a {
     min-height: 44px;
-  }
-  .copy-status {
-    text-align: left;
   }
 }
 @media (max-width: 370px) {

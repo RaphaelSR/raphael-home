@@ -98,21 +98,10 @@ test("keyboard, scroll navigation, reduced motion and contact actions", async ({
   ).toBe("0s");
   await page.locator(".back-top").click();
   await expect(page.locator(".header")).not.toHaveClass(/is-compact/);
-  await page.evaluate(() =>
-    Object.defineProperty(navigator, "clipboard", {
-      value: {
-        writeText: async () => {
-          throw Error("denied");
-        },
-      },
-      configurable: true,
-    }),
-  );
-  await page.locator(".discord").click();
-  await expect(page.getByRole("status")).toContainText("raphaelsr");
   await expect(
-    page.locator('a[href="https://wa.me/[personal phone removed]"]'),
-  ).toHaveCount(1);
+    page.locator('a[href^="mailto:"], a[href^="tel:"], a[href*="wa.me"]'),
+  ).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /discord/i })).toHaveCount(0);
 });
 
 test("production assets and content policy", async ({ page }) => {

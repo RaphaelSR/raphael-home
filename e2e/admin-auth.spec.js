@@ -1,10 +1,12 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { mockOwnerAccount, ownerEmail } from "./admin-fixture.js";
 
 async function loginFixture(
   page,
   { owner = true, status = 200, expires = 3600 } = {},
 ) {
+  await mockOwnerAccount(page);
   const requests = [];
   await page.route("https://accounts.google.com/gsi/client", (route) =>
     route.fulfill({
@@ -17,7 +19,7 @@ async function loginFixture(
     (route) =>
       route.fulfill({
         json: {
-          email: owner ? "raphaelrochabcc@gmail.com" : "other@example.com",
+          email: owner ? ownerEmail : "other@example.com",
           email_verified: true,
         },
       }),

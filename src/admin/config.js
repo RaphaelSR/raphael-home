@@ -2,7 +2,8 @@ export const config = {
   clientId:
     "534447448870-7slg5kbr80ki012p30981cm7smotuc3f.apps.googleusercontent.com",
   propertyId: "555394741",
-  owner: "raphaelrochabcc@gmail.com",
+  ownerEmailHash:
+    "7037c7f85cf9b8b55c093d9d8359d3569c05cfd5ad0ccfd77eeb46d29c0c129d",
 };
 export const sites = {
   "raphaelrocha.com": "Principal",

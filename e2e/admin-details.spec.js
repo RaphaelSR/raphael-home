@@ -1,11 +1,13 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { mockOwnerAccount, ownerEmail } from "./admin-fixture.js";
 
 const row = (labels, values) => ({
   dimensionValues: labels.map((value) => ({ value })),
   metricValues: values.map((value) => ({ value: String(value) })),
 });
 async function fixture(page, denied = false) {
+  await mockOwnerAccount(page);
   const calls = [];
   await page.route("https://accounts.google.com/gsi/client", (route) =>
     route.fulfill({
@@ -17,7 +19,7 @@ async function fixture(page, denied = false) {
     "https://openidconnect.googleapis.com/v1/userinfo",
     (route) =>
       route.fulfill({
-        json: { email: "raphaelrochabcc@gmail.com", email_verified: true },
+        json: { email: ownerEmail, email_verified: true },
       }),
   );
   await page.route("https://analyticsdata.googleapis.com/**", (route) => {

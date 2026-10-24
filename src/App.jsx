@@ -151,16 +151,7 @@ export default function App({ initialLanguage = "en" }) {
   const { language, theme, changeLanguage, changeTheme } =
     usePreferences(initialLanguage);
   const t = messages[language];
-  const [copyStatus, setCopyStatus] = useState(null);
   const portfolio = `https://portfolio.raphaelrocha.com/${language}/`;
-  async function copyDiscord() {
-    try {
-      await navigator.clipboard.writeText("raphaelsr");
-      setCopyStatus("copied");
-    } catch {
-      setCopyStatus("copyFailed");
-    }
-  }
   return (
     <>
       <a className="skip" href="#main">
@@ -259,16 +250,6 @@ export default function App({ initialLanguage = "en" }) {
           <a href="https://www.linkedin.com/in/raphael-rocha-903014103/">
             LinkedIn <Arrow />
           </a>
-          <a href="mailto:raphaelrochabcc@gmail.com">
-            {t.email} <Arrow />
-          </a>
-          <a href="https://wa.me/[personal phone removed]">
-            WhatsApp <Arrow />
-          </a>
-          <button className="discord" onClick={copyDiscord} title={t.copy}>
-            Discord <span>raphaelsr</span>
-            <span aria-hidden="true">⧉</span>
-          </button>
         </nav>
         <nav aria-label={t.language} className="locale-links">
           {Object.entries(languages).map(([locale, label]) => (
@@ -283,9 +264,6 @@ export default function App({ initialLanguage = "en" }) {
             </a>
           ))}
         </nav>
-        <p className="copy-status" role="status">
-          {copyStatus ? t[copyStatus] : ""}
-        </p>
       </footer>
     </>
   );

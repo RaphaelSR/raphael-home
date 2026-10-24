@@ -170,7 +170,6 @@ function Admin() {
         include_granted_scopes: false,
         scope:
           "openid email https://www.googleapis.com/auth/analytics.readonly",
-        hint: config.owner,
         callback: async (result) => {
           const attempt = ++authAttempt.current;
           if (result.error || !result.access_token) {
@@ -190,7 +189,16 @@ function Admin() {
             if (!response.ok)
               throw new Error("Não foi possível verificar sua conta Google.");
             const user = await response.json();
-            if (user.email !== config.owner || !user.email_verified)
+            const fingerprint = Array.from(
+              new Uint8Array(
+                await crypto.subtle.digest(
+                  "SHA-256",
+                  new TextEncoder().encode(user.email || ""),
+                ),
+              ),
+              (byte) => byte.toString(16).padStart(2, "0"),
+            ).join("");
+            if (fingerprint !== config.ownerEmailHash || !user.email_verified)
               throw new Error("Acesso reservado à conta proprietária.");
             if (attempt === authAttempt.current) {
               setError("");

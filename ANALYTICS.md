@@ -4,7 +4,7 @@ Collection uses one GA4 web stream (G-9F41PKY1G5) linked to the Firebase Spark p
 
 ## Access boundary
 
-/admin/ is a public static login screen; report data is not embedded in its HTML or bundle. Google authorizes each Analytics Data API request using an in-memory OAuth access token. The GA property (555394741) must remain accessible only to the owner, raphaelrochabcc@gmail.com, and the Firebase project must have no additional human members. Keep the OAuth consent app in testing with the owner as the only test user and https://raphaelrocha.com as the only JavaScript origin. The client-side email check is defense in depth, not the authorization boundary.
+/admin/ is a public static login screen; report data is not embedded in its HTML or bundle. Google authorizes each Analytics Data API request using an in-memory OAuth access token. The GA property (555394741) must remain accessible only to the owner account and the Firebase project must have no additional human members. Keep the OAuth consent app in testing with the owner as the only test user and https://raphaelrocha.com as the only JavaScript origin. The client-side email fingerprint check is defense in depth, not the authorization boundary.
 
 The OAuth client ID, measurement ID and property ID are public identifiers. Never commit a client secret, access/refresh token or service-account JSON. No client secret is used by this application. Tokens expire, are removed on logout/reload, and are never written to cookies or browser storage. The requested scopes are openid, email and analytics.readonly.
 
