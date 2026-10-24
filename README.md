@@ -12,7 +12,7 @@ Node 22.22.2 or newer. Run `npm ci`, `npm run dev` (localhost:3025), `npm run bu
 
 React and Vite, system fonts, no third-party embeds or backend. Optional Google Analytics collection starts only after consent; the owner-only admin reads GA4 directly using an in-memory Google OAuth token. Portuguese, English and Spanish use browser preferences with an English fallback. Theme follows the system unless manually selected; preferences remain usable if storage is unavailable. Essential navigation also works without JavaScript.
 
-The header owns its scroll state so scrolling does not rerender the page content. Motion respects reduced-motion settings. Links to external projects are explicit HTTPS destinations. Only public GitHub and LinkedIn profiles are listed as contact links.
+The header owns its scroll state so scrolling does not rerender the page content. Motion respects reduced-motion settings. Links to external projects are explicit HTTPS destinations. Public GitHub and LinkedIn profiles and a personal email address are available as contact links. Personal phone numbers and WhatsApp links are omitted.
 
 The production content policy limits scripts to the same origin and blocks network API calls, frames, plugins and forms. Inline styles are permitted for the scroll indicator. GitHub Pages serves static assets; application security does not depend on a client-side secret. Do not commit credentials or environment files.
 

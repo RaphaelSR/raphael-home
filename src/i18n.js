@@ -50,6 +50,7 @@ export const messages = {
       "Experiência profissional, produtos em que contribuí e as tecnologias com que trabalho.",
     visit: "Visitar o portfólio",
     contacts: "Links de contato",
+    email: "E-mail",
   },
   en: {
     currentWork: "Currently building",
@@ -97,6 +98,7 @@ export const messages = {
       "Professional experience, products I have contributed to and the technologies I work with.",
     visit: "Visit my portfolio",
     contacts: "Contact links",
+    email: "Email",
   },
   es: {
     currentWork: "En desarrollo",
@@ -146,5 +148,6 @@ export const messages = {
       "Experiencia profesional, productos en los que he contribuido y las tecnologías con las que trabajo.",
     visit: "Visitar el portafolio",
     contacts: "Enlaces de contacto",
+    email: "Correo",
   },
 };

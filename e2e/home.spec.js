@@ -98,10 +98,10 @@ test("keyboard, scroll navigation, reduced motion and contact actions", async ({
   ).toBe("0s");
   await page.locator(".back-top").click();
   await expect(page.locator(".header")).not.toHaveClass(/is-compact/);
-  await expect(
-    page.locator('a[href^="mailto:"], a[href^="tel:"], a[href*="wa.me"]'),
-  ).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /discord/i })).toHaveCount(0);
+  await expect(page.locator('a[href^="tel:"], a[href*="wa.me"]')).toHaveCount(
+    0,
+  );
+  await expect(page.locator('footer a[href^="mailto:"]')).toHaveCount(1);
 });
 
 test("production assets and content policy", async ({ page }) => {

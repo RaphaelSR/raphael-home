@@ -250,6 +250,9 @@ export default function App({ initialLanguage = "en" }) {
           <a href="https://www.linkedin.com/in/raphael-rocha-903014103/">
             LinkedIn <Arrow />
           </a>
+          <a href="mailto:raphaelrochabcc@gmail.com">
+            {t.email} <Arrow />
+          </a>
         </nav>
         <nav aria-label={t.language} className="locale-links">
           {Object.entries(languages).map(([locale, label]) => (
