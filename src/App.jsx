@@ -3,6 +3,12 @@ import { languages, messages } from "./i18n";
 import { usePreferences } from "./preferences";
 const projects = [
   {
+    id: "cantinho",
+    name: "Lotcraft",
+    type: "tool",
+    host: "lotcraft.app",
+  },
+  {
     id: "basilica",
     name: "Basílica de Nazaré",
     type: "study",
@@ -13,12 +19,6 @@ const projects = [
     name: "Geometry",
     type: "tool",
     host: "3d.raphaelrocha.com",
-  },
-  {
-    id: "cantinho",
-    name: "Lotcraft",
-    type: "tool",
-    host: "lotcraft.app",
   },
   {
     id: "trivia",
