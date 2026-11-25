@@ -9,6 +9,7 @@
     "snake.raphaelrocha.com",
     "flybrain.raphaelrocha.com",
     "basilica.raphaelrocha.com",
+    "lyra.raphaelrocha.com",
     "cantinho.raphaelrocha.com",
   ]);
   if (
