@@ -13,6 +13,7 @@ export const sites = {
   "mimica.raphaelrocha.com": "Mímica",
   "snake.raphaelrocha.com": "Snake",
   "flybrain.raphaelrocha.com": "Fly Brain Bench",
+  "lyra.raphaelrocha.com": "Lyra Candle",
   "basilica.raphaelrocha.com": "Basílica de Nazaré",
   "cantinho.raphaelrocha.com": "Lotcraft — histórico Cantinho",
   "lotcraft.app": "Lotcraft",
